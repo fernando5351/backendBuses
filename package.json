@@ -6,15 +6,26 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon index.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "migration-genetate": "sequelize-cli migration:generate --name",
+    "migration-run": "sequelize-cli db:migrate",
+    "migration-rollback": "sequelize-cli db:migrate:undo",
+    "migration-delete": "sequelize-cli db:migrate:undo:all",
+    "migration-debug": "sequelize-cli db:migrate --debug"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@hapi/boom": "^10.0.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "joi": "^17.9.2",
+    "mysql2": "^3.3.5",
     "nodemon": "^2.0.22",
     "sequelize": "^6.31.0"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.6.1"
   }
 }
