@@ -1,9 +1,9 @@
-const app = require("./src/app");
+const app = require('./src/app');
 
-app.listen(app.get("port"),e=>{
+app.listen(app.get('port'),e=>{
     try {
-        console.log("servidor corriendo en el puerto: " + app.get("port"));
+        console.log('server running on port: ' + app.get('port'));
     } catch (error) {
-        console.log("tienes un error en: " + e);
+        console.log('there was an error in: ' + e);
     }
 });
