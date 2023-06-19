@@ -8,10 +8,15 @@ const createRol = joi.object({
 });
 
 const getRol = joi.object({
-	id: id.require()
+	id: id.required()
+});
+
+const updatedRole = joi.object({
+	name
 });
 
 module.exports = {
 	createRol,
-	getRol
+	getRol,
+	updatedRole
 };

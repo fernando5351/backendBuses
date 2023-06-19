@@ -1,11 +1,11 @@
 'use strict';
 
-const { ROLE_TABLE, roleSchema } = require('../models/RoleModel')
+const { ROLE_TABLE, RoleSchema } = require('../models/RoleModel')
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface) {
-    await queryInterface.createTable(ROLE_TABLE, roleSchema);
+    await queryInterface.createTable(ROLE_TABLE, RoleSchema);
   },
 
   async down (queryInterface) {

@@ -3,6 +3,10 @@ const cors = require('cors');
 const port = process.env.PORT || 9000;
 const routerApi = require('./routes');
 const boom = require('@hapi/boom');
+const multer = require('multer');
+const storage = require('../config/multer')
+const path = require('path');
+const { logErrors, ormErrorHandler, boomErrorHandler, errorHandler } = require('../middlewares/errorHandler')
 
 //initialization
 const app = express();
@@ -10,7 +14,8 @@ const app = express();
 //config
 app.set('port', port);
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: '30mb' }));
+app.use(multer({storage}).single('file'));
 
 //middlewar
 const whitelist = ['http://localhost:8080', 'https://myapp.co'];
@@ -33,5 +38,8 @@ app.use(logErrors);
 app.use(ormErrorHandler);
 app.use(boomErrorHandler);
 app.use(errorHandler);
+
+//public files
+app.use(express.static(path.join(__dirname, "../public")));
 
 module.exports = app;

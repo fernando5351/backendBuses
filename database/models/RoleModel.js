@@ -2,7 +2,7 @@ const { Model, DataTypes } = require('sequelize');
 
 const ROLE_TABLE = 'roles';
 
-const roleSchema = {
+const RoleSchema = {
     id: {
         allowNull: false,
         primaryKey: true,
@@ -37,6 +37,6 @@ class Role extends Model {
 
 module.exports = {
     ROLE_TABLE,
-    roleSchema,
+    RoleSchema,
     Role
 }
