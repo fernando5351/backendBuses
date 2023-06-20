@@ -39,7 +39,7 @@ class RoleService {
 		}
 		return Promise.resolve({
 			status: 200,
-			message:`User ${id} Fetched`,
+			message:`Role ${id} Fetched`,
 			role
 		});
 	}
@@ -49,7 +49,7 @@ class RoleService {
 		const roleUpdated =  await role.update(data);
 		console.log(roleUpdated);
 		return Promise.resolve({
-			status: 200,
+			status: 202,
 			message:"Updated!",
 			roleUpdated
 		});
