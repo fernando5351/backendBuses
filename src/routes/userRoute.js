@@ -2,6 +2,7 @@ const validatorHandler = require('../../middlewares/validatorHandler');
 const UserServie = require('../services/userService');
 const router = require('express').Router();
 const { getUser, createUser, updateUser } = require('../schemas/userSchema');
+const passport = require('passport');
 
 const service = new UserServie;
 
@@ -16,11 +17,13 @@ router.get('/', async(req, res, next)=>{
 
 router.get('/:id',
 	validatorHandler(getUser, 'params'),
+	passport.authenticate('jwt', { session: false }),
 	async(req, res, next)=> {
 		try {
+			const payload = req.user;
 			const { id } = req.params;
-			const data = await service.getByPk(id);
-			res.status(304).json(data);
+			const data = await service.getByPk(id, payload);
+			res.status(302).json(data);
 		} catch (error) {
 			next(error);
 		}
@@ -49,6 +52,19 @@ router.patch('/:id',
 			const data = req.body;
 			const user = await service.update(id, data);
 			res.status(202).json(user);
+		} catch (error) {
+			next(error);
+		}
+	}
+);
+
+router.delete('/:id',
+	validatorHandler(getUser, 'params'),
+	async(req, res, next)=> {
+		try {
+			const { id } = req.params;
+			const data = await service.delete(id);
+			res.status(202).json(data);
 		} catch (error) {
 			next(error);
 		}
