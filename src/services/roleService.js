@@ -21,7 +21,7 @@ class RoleService {
 
 	async getAll(){
 		let roles =  await models.Role.findAll();
-		if(!roles || Array.isArray(roles)){
+		if(!roles){
 			throw boom.notFound("No records found");
 		} else {
 			return Promise.resolve({
