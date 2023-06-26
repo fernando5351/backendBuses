@@ -1,18 +1,29 @@
 const boom = require('@hapi/boom');
 const { models } = require('../../libs/sequelize');
+const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 
 class UserServie {
+
 	async create(data) {
-		try{
-			const newUser = await models.User.create(data);
+		try {
+			const pass = await bcrypt.hash(data.password, 10);
+			const tokenCode = crypto.randomBytes(5).toString('hex');
+			const userData = {
+				...data,
+				password: pass,
+				verificationCode: tokenCode
+			}
+			const user = await models.User.create(userData);
 			return {
 				status: 201,
 				message:"New User created",
-				newUser
+				user
 			};
-		}catch (error){
-					throw error;
-		};
+		} catch (error) {
+			console.log('Error in creating a new user')
+			throw error;
+		}
 	}
 
 	async getAll(){
@@ -36,6 +47,20 @@ class UserServie {
 		return {
 			status: 302,
 			message: `User ${id} fetched`,
+			user
+		}
+	}
+
+	async getByEmail(email) {
+		const user = await models.User.findOne({
+			where:{ email }
+		});
+		if (!user) {
+			throw boom.notFound('User not found!');
+		}
+		return {
+			status: 302,
+			message: `User ${email} fetched`,
 			user
 		}
 	}
