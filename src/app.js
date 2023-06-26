@@ -1,6 +1,6 @@
 const express =  require('express');
 const cors = require('cors');
-const port = process.env.PORT || 9000;
+const port = process.env.PORT || 3000;
 const routerApi = require('./routes');
 const boom = require('@hapi/boom');
 const multer = require('multer');
@@ -24,11 +24,12 @@ const options = {
     if (whitelist.includes(origin) || !origin) {
       callback(null, true);
     } else {
-      callback(new Error(boom.forbidden('Access denied due to CORS security restrictions')));
+      callback(new Error(boom.unauthorized('Access denied due to CORS security restrictions')));
     }
   }
 }
 app.use(cors(options));
+require('./utils');
 
 //routes
 routerApi(app);
