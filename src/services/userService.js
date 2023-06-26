@@ -3,8 +3,11 @@ const { models } = require('../../libs/sequelize');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const mailerService = require('./mailerService');
+const fs = require('fs');
+const path = require('path');
 
 const service = new mailerService;
+const bodyHtml = fs.readFileSync(path.join(__dirname, '../utils/mail/verify.mail.html'), 'UTF-8');
 
 class UserServie {
 
@@ -22,14 +25,14 @@ class UserServie {
 	async create(data) {
 		try {
 			const pass = await bcrypt.hash(data.password, 10);
-			//const tokenCode = crypto.randomBytes(3).toString('hex');
 			const userData = {
 				...data,
 				password: pass,
 				verificationCode: this.code()
 			}
-			const user = await models.User.create(userData);
-			const rta = await service.sendMail(user, 'verification code', `<h1><strond>${this.code()}</strond></h1>`);
+				const user = await models.User.create(userData);
+			const html = bodyHtml.replace('{{code}}', user.dataValues.verificationCode);
+			await service.sendMail(user, 'verification code', html);
 			return {
 				status: 201,
 				message:"New User created",
@@ -57,8 +60,11 @@ class UserServie {
 		const user = await models.User.findByPk(id);
 		if (!user) {
 			throw boom.notFound("User not found!");
-		} if (payload.sub !== user.id) {
-			throw boom.unauthorized("you are not authorized");
+		}
+		if(payload) {
+			if (payload?.sub !== user.id) {
+				throw boom.unauthorized("you are not authorized");
+			}
 		}
 		return {
 			status: 302,
