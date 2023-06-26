@@ -1,5 +1,5 @@
 const { Sequelize, Model, DataTypes } = require('sequelize');
-const { ROLE_TABLE } = require('./RoleModel');
+const { ROLE_TABLE } = require('./RoleModel')
 
 const USER_TABLE = 'users';
 
@@ -26,7 +26,7 @@ const userSchema = {
     roleId:{
         allowNull: false,
         type: DataTypes.INTEGER,
-        field: 'role_id',
+        field: 'role_Id',
         unique: false,
         references: {
             model: ROLE_TABLE,
@@ -35,6 +35,16 @@ const userSchema = {
         onUpdate: 'CASCADE',
         onDelete: 'NO ACTION'
     },
+		verification: {
+			allowNull: false,
+			type: DataTypes.BOOLEAN,
+			defaultValue: false
+		},
+		verificationCode: {
+			allowNull: false,
+      type: DataTypes.STRING,
+			field:'verification_code'
+		},
     createAt: {
         allowNull: false,
         type: DataTypes.DATE,
@@ -46,7 +56,7 @@ const userSchema = {
 class User extends Model {
     static associate(models) {
         this.belongsTo(models.Role, {
-            as: 'Role'
+            as: 'role'
         });
     };
 
