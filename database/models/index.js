@@ -1,12 +1,12 @@
 const { Role, RoleSchema } = require('./RoleModel');
-const { UserSchema, User } = require('./UserModel');
+const { userSchema, User } = require('./UserModel');
 
 function setupModels(sequelize) {
-	Role.init(RoleSchema, Role.config(sequelize))
-  User.init(UserSchema, User.config(sequelize));
+	Role.init(RoleSchema, Role.config(sequelize));
+  User.init(userSchema, User.config(sequelize));
 
-	//associations
-	Role.associate(sequelize.models)
+	//relations
+	Role.associate(sequelize.models);
 	User.associate(sequelize.models);
 };
 
