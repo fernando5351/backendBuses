@@ -10,11 +10,11 @@ const localStrategy = new Strategy({
     passwordField: 'password'
   }, async (email, password, done) =>{
 		const user = await service.getByEmail(email);
-		if(!user){
+		if(!user.user){
 			 return done(boom.unauthorized('mail not found'), false);
 		}
 		const pass = await bcrypt.compare(password, user.user.dataValues.password);
-		console.log(user.user.dataValues.password + ' => password ' + pass);
+
 		if (!pass ) {
 			return done(boom.unauthorized('incorrect password'), false);
 		}
