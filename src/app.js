@@ -29,7 +29,7 @@ const options = {
   }
 }
 app.use(cors(options));
-require('./utils');
+require('./utils/auth');
 
 //routes
 routerApi(app);
