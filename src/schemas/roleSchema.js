@@ -2,9 +2,11 @@ const joi = require('joi');
 
 const id = joi.number().integer();
 const name = joi.string().min(3).max(100);
+const status = joi.boolean();
 
 const createRol = joi.object({
-	name: name.required()
+	name: name.required(),
+	status
 });
 
 const getRol = joi.object({
@@ -12,7 +14,8 @@ const getRol = joi.object({
 });
 
 const updatedRole = joi.object({
-	name
+	name,
+	status
 });
 
 module.exports = {
