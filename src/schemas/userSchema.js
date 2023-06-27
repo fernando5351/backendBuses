@@ -5,12 +5,14 @@ const username = joi.string().min(3).max(25);
 const email = joi.string().email().min(5).max(75);
 const password = joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).min(3).max(15);
 const roleId = joi.number().integer();
+const status = joi.boolean();
 
 const createUser = joi.object({
 	username: username.required(),
 	email: email.required(),
 	password: password.required(),
-	roleId: roleId.required()
+	roleId: roleId.required(),
+	status
 });
 
 const getUser = joi.object({
@@ -21,7 +23,8 @@ const updateUser = joi.object({
 	username,
 	email,
 	password,
-	roleId
+	roleId,
+	status
 });
 
 const login = joi.object({
