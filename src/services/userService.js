@@ -30,8 +30,9 @@ class UserServie {
 				password: pass,
 				verificationCode: this.code()
 			}
-				const user = await models.User.create(userData);
-			const html = bodyHtml.replace('{{code}}', user.dataValues.verificationCode);
+			const user = await models.User.create(userData);
+			let html = bodyHtml.replace('{{code}}', user.dataValues.verificationCode);
+			html = html.replace('{{username}}', user.dataValues.username);
 			await service.sendMail(user, 'verification code', html);
 			return {
 				status: 201,
