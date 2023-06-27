@@ -1,12 +1,16 @@
 const router = require('express').Router();
 const Service = require('../services/roleService');
 const { createRol, getRol, updatedRole } = require('../schemas/roleSchema');
-const validatorHandler = require('../../middlewares/validatorHandler')
+const validatorHandler = require('../../middlewares/validatorHandler');
+const passport = require('passport');
+const { checkRole } = require('../../middlewares/authHandler');
 
 const service = new Service;
 
 router.post('/',
 	validatorHandler(createRol, 'body'),
+	passport.authenticate('jwt', { session: false }),
+	checkRole('admin'),
 	async (req, res, next) => {
 		try {
 			const data = req.body;
@@ -18,7 +22,10 @@ router.post('/',
 	}
 );
 
-router.get('/', async(req, res, next)=>{
+router.get('/',
+	passport.authenticate('jwt', { session: false }),
+	checkRole('admin'),
+	async(req, res, next)=>{
 	try {
 		const roles = await service.getAll();
 		return res.status(200).json(roles);
@@ -29,6 +36,8 @@ router.get('/', async(req, res, next)=>{
 
 router.get('/:id',
 	validatorHandler(getRol, 'params'),
+	passport.authenticate('jwt', { session: false }),
+	checkRole('admin'),
 	async(req, res, next)=>{
 	try {
 		const { id } = req.params;
@@ -42,6 +51,8 @@ router.get('/:id',
 router.patch('/:id',
 	validatorHandler(getRol, 'params'),
 	validatorHandler(updatedRole, 'body'),
+	passport.authenticate('jwt', { session: false }),
+	checkRole('admin'),
 	async(req, res, next)=>{
 		try{
 			const { id }= req.params;
@@ -56,6 +67,8 @@ router.patch('/:id',
 
 router.delete('/:id',
 	validatorHandler(getRol, 'params'),
+	passport.authenticate('jwt', { session: false }),
+	checkRole('admin'),
 	async(req,res,next)=>{
 		try{
 			const { id } = req.params;

@@ -1,4 +1,5 @@
 const validatorHandler = require('../../middlewares/validatorHandler');
+const { checkRole } = require('../../middlewares/authHandler');
 const UserServie = require('../services/userService');
 const router = require('express').Router();
 const { getUser, createUser, updateUser } = require('../schemas/userSchema');
@@ -6,18 +7,23 @@ const passport = require('passport');
 
 const service = new UserServie;
 
-router.get('/', async(req, res, next)=>{
-	try {
-		const data = await service.getAll();
-		res.status(200).json(data)
-	} catch (error) {
-		next(error);
+router.get('/',
+	passport.authenticate('jwt', {session: false}),
+	checkRole('admin'),
+	async(req, res, next)=>{
+		try {
+			const data = await service.getAll();
+			res.status(200).json(data)
+		} catch (error) {
+			next(error);
+		}
 	}
-});
+);
 
 router.get('/:id',
 	validatorHandler(getUser, 'params'),
 	passport.authenticate('jwt', { session: false }),
+	checkRole('customer', 'admin'),
 	async(req, res, next)=> {
 		try {
 			const payload = req.user;
@@ -46,11 +52,14 @@ router.post('/register',
 router.patch('/:id',
 	validatorHandler(getUser, 'params'),
 	validatorHandler(updateUser, 'body'),
+	passport.authenticate('jwt', { session: false }),
+	checkRole('customer', 'admin'),
 	async(req, res, next)=> {
 		try {
 			const { id } = req.params;
+			const payload = req.user;
 			const data = req.body;
-			const user = await service.update(id, data);
+			const user = await service.update(id, data, payload);
 			res.status(202).json(user);
 		} catch (error) {
 			next(error);
@@ -60,10 +69,13 @@ router.patch('/:id',
 
 router.delete('/:id',
 	validatorHandler(getUser, 'params'),
+	passport.authenticate('jwt', { session: false }),
+	checkRole('customer', 'admin', 'personal'),
 	async(req, res, next)=> {
 		try {
 			const { id } = req.params;
-			const data = await service.delete(id);
+			const payload = req.user;
+			const data = await service.delete(id, payload);
 			res.status(202).json(data);
 		} catch (error) {
 			next(error);
