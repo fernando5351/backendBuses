@@ -44,7 +44,9 @@ class UserServie {
 	}
 
 	async getAll(){
-		let user =  await models.User.findAll();
+		let user =  await models.User.findAll({
+			include: ['role']
+		});
 		if(!user){
 			throw boom.notFound("No records found");
 		} else {
@@ -57,7 +59,9 @@ class UserServie {
 	}
 
 	async getByPk(id, payload) {
-		const user = await models.User.findByPk(id);
+		const user = await models.User.findByPk(id,{
+			include: ['role']
+		});
 		if (!user) {
 			throw boom.notFound("User not found!");
 		}
@@ -75,7 +79,8 @@ class UserServie {
 
 	async getByEmail(email) {
 		const user = await models.User.findOne({
-			where:{ email }
+			where:{ email },
+			include: ['role']
 		});
 		return {
 			status: 302,
@@ -84,8 +89,8 @@ class UserServie {
 		}
 	}
 
-	async update(id, data) {
-		const user = await this.getByPk(id);
+	async update(id, data, payload) {
+		const { user } = await this.getByPk(id, payload);
 		const res = await user.update(data);
 		return Promise.resolve({
 			status: 202,
@@ -95,8 +100,8 @@ class UserServie {
 		})
 	}
 
-	async delete(id){
-		const { user } = await this.getByPk(id);
+	async delete(id, payload){
+		const { user } = await this.getByPk(id, payload);
 		await user.destroy();
 		return Promise.resolve({
 			status: 202,
