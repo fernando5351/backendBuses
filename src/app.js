@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true, limit: '30mb' }));
 app.use(multer({storage}).single('file'));
 
 //middlewar
-const whitelist = ['http://localhost:8080', 'https://myapp.co'];
+const whitelist = ['https://app.swaggerhub.com/apis-docs/ISAACFERNANDO5351/BusES/1'];
 const options = {
   origin: (origin, callback) => {
     if (whitelist.includes(origin) || !origin) {
