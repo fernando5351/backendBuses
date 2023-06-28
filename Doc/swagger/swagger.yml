@@ -1,0 +1,325 @@
+openapi: 3.0.3
+info:
+  title: Mi API
+  version: 1.0.0
+  description: |
+    The Bus Tracking API is an application programming interface that allows you to access and manage information related to bus tracking, trip records, bus routes, and other relevant data.
+  contact:
+    email: devbuses503@gmail.com
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: railway production
+    url: https://buses-production.up.railway.app/api/v1
+  - url: https://localhost:300/api/v1
+
+security:
+  - BearerAuth: []
+
+tags:
+  - name: role
+    description: Endpoints to manage user roles (CRUD).
+  - name: user
+    description: Endpoints to manage users (CRUD).
+  - name: auth
+    description: Endpoint to authenticate a user and start a session.
+
+paths:
+  /role:
+    get:
+      tags:
+         - role
+      summary: fetch all roles
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: ok
+
+    post:
+      tags:
+         - role
+      summary: create new role
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: campos
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/createRol"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/createRol"
+      responses:
+        "201":
+          description: created
+
+  /role/{id}:
+    get:
+      tags:
+        - role
+      summary: get a role
+      security:
+        - BearerAuth: []
+      description: get role by primary key(id)
+      parameters:
+        - name: id
+          in: path
+          description: id is used by records search
+          required: true
+          schema:
+            type: number
+      responses:
+        "302":
+          description: found
+        "404":
+          description: not found
+
+    patch:
+      tags:
+        - role
+      summary: update a role
+      security:
+        - BearerAuth: []
+      description: get role by primary key(id)
+      parameters:
+        - name: id
+          in: path
+          description: id is used by records search
+          required: true
+          schema:
+            type: number
+      requestBody:
+        description: campos
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/updatedRole"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/updatedRole"
+      responses:
+        "202":
+          description: acepted
+        "404":
+          description: not found
+
+    delete:
+      tags:
+        - role
+      summary: delete a role
+      security:
+        - BearerAuth: []
+      description: get user by primary key(id)
+      parameters:
+        - name: id
+          in: path
+          description: id is used by records search
+          required: true
+          schema:
+            type: number
+      responses:
+        "202":
+          description: acepted
+        "404":
+          description: not found
+
+  /user/register:
+    post:
+      tags:
+       - user
+      summary: create new user
+      requestBody:
+        description: campos
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/user"
+                - required:
+                  - username
+                  - email
+                  - password
+                  - roleId
+          application/x-www-form-urlencoded:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/user"
+                - required:
+                  - username
+                  - email
+                  - password
+                  - roleId
+      responses:
+        "201":
+          description: created
+
+  /user:
+    get:
+      tags:
+        - user
+      summary: get a user
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: all records fetched
+        "404":
+          description: not found
+
+  /user/{id}:
+    get:
+      tags:
+        - user
+      summary: get a user
+      security:
+        - BearerAuth: []
+      description: get user by primary key(id)
+      parameters:
+        - name: id
+          in: path
+          description: id is used by records search
+          required: true
+          schema:
+            type: number
+      responses:
+        "302":
+          description: found
+        "404":
+          description: not found
+
+    patch:
+      tags:
+        - user
+      summary: update a user
+      security:
+        - BearerAuth: []
+      description: get user by primary key(id)
+      parameters:
+        - name: id
+          in: path
+          description: id is used by records search
+          required: true
+          schema:
+            type: number
+      requestBody:
+        description: campos
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/user"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/user"
+      responses:
+        "202":
+          description: acepted
+        "404":
+          description: not found
+
+    delete:
+      tags:
+        - user
+      summary: delete a user
+      security:
+        - BearerAuth: []
+      description: get user by primary key(id)
+      parameters:
+        - name: id
+          in: path
+          description: id is used by records search
+          required: true
+          schema:
+            type: number
+      responses:
+        "202":
+          description: acepted
+        "404":
+          description: not found
+
+  /auth/login:
+    post:
+      tags:
+       - auth
+      summary: login user
+      requestBody:
+        description: campos
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/login"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/login"
+      responses:
+        "201":
+          description: created
+
+components:
+
+  securitySchemes:
+    BearerAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+
+  schemas:
+
+    name:
+      type: string
+      minLength: 3
+      maxLength: 75
+
+    status:
+      type: boolean
+
+    email:
+      type: string
+
+    password:
+      type: string
+
+    createRol:
+      allOf:
+        - $ref: '#/components/schemas/role'
+        - required:
+            - name
+
+    updatedRole:
+      $ref: '#/components/schemas/role'
+
+    role:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/name'
+        status:
+          $ref: '#/components/schemas/status'
+
+    user:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 3
+          maxLength: 75
+          example: miuser123
+        email:
+          $ref: '#/components/schemas/email'
+        password:
+          $ref: '#/components/schemas/password'
+        roleId:
+          type: number
+        status:
+          $ref: '#/components/schemas/status'
+
+    login:
+      type: object
+      properties:
+        email:
+          $ref: '#/components/schemas/email'
+        password:
+          $ref: '#/components/schemas/password'
+      required:
+        - email
+        - password
