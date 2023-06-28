@@ -1,13 +1,14 @@
 const router = require('express').Router();
+const passport = require('passport');
 const Service = require('../services/roleService');
 const { createRol, getRol, updatedRole } = require('../schemas/roleSchema');
 const validatorHandler = require('../../middlewares/validatorHandler');
-const passport = require('passport');
 const { checkRole } = require('../../middlewares/authHandler');
 
-const service = new Service;
+const service = new Service();
 
-router.post('/',
+router.post(
+	'/',
 	validatorHandler(createRol, 'body'),
 	passport.authenticate('jwt', { session: false }),
 	checkRole('admin'),
@@ -15,70 +16,75 @@ router.post('/',
 		try {
 			const data = req.body;
 			const role = await service.createRole(data);
-			res.status(201).json(role)
+			res.status(201).json(role);
 		} catch (error) {
 			next(error);
 		}
-	}
+	},
 );
 
-router.get('/',
+router.get(
+	'/',
 	passport.authenticate('jwt', { session: false }),
 	checkRole('admin'),
-	async(req, res, next)=>{
-	try {
-		const roles = await service.getAll();
-		return res.status(200).json(roles);
-	} catch (error) {
-		next(error);
-	}
-});
+	async (req, res, next) => {
+		try {
+			const roles = await service.getAll();
+			res.status(200).json(roles);
+		} catch (error) {
+			next(error);
+		}
+	},
+);
 
-router.get('/:id',
+router.get(
+	'/:id',
 	validatorHandler(getRol, 'params'),
 	passport.authenticate('jwt', { session: false }),
 	checkRole('admin'),
-	async(req, res, next)=>{
-	try {
-		const { id } = req.params;
-		const roles = await service.getByPk(id);
-		return res.status(302).json(roles);
-	} catch (error) {
-		next(error);
-	}
-});
+	async (req, res, next) => {
+		try {
+			const { id } = req.params;
+			const roles = await service.getByPk(id);
+			res.status(302).json(roles);
+		} catch (error) {
+			next(error);
+		}
+	},
+);
 
-router.patch('/:id',
+router.patch(
+	'/:id',
 	validatorHandler(getRol, 'params'),
 	validatorHandler(updatedRole, 'body'),
 	passport.authenticate('jwt', { session: false }),
 	checkRole('admin'),
-	async(req, res, next)=>{
-		try{
-			const { id }= req.params;
+	async (req, res, next) => {
+		try {
+			const { id } = req.params;
 			const updateData = req.body;
 			const role = await service.update(id, updateData);
-			return res.status(202).json(role);
-		}catch(err){
-				next(err);
+			res.status(202).json(role);
+		} catch (err) {
+			next(err);
 		}
-	}
-)
+	},
+);
 
-router.delete('/:id',
+router.delete(
+	'/:id',
 	validatorHandler(getRol, 'params'),
 	passport.authenticate('jwt', { session: false }),
 	checkRole('admin'),
-	async(req,res,next)=>{
-		try{
+	async (req, res, next) => {
+		try {
 			const { id } = req.params;
 			const data = await service.delete(id);
-			return res.status(202).json(data);
-		}catch(err){
-				next(err);
+			res.status(202).json(data);
+		} catch (err) {
+			next(err);
 		}
-	}
-)
-
+	},
+);
 
 module.exports = router;

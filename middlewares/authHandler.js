@@ -2,7 +2,6 @@ const boom = require('@hapi/boom');
 
 function checkRole(...role) {
 	return (req, res, next) => {
-		console.log(role.includes(req.user.role) && req.user.status === true && req.user.subject);
 		if (role.includes(req.user.role) && req.user.status === true) {
 			next();
 		} else {
@@ -13,4 +12,4 @@ function checkRole(...role) {
 
 module.exports = {
 	checkRole,
-}
+};

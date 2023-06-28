@@ -1,24 +1,22 @@
 const router = require('express').Router();
+const passport = require('passport');
 const { login } = require('../schemas/userSchema');
 const validatorHandler = require('../../middlewares/validatorHandler');
-const AuthService = require('../services/authService');
-const passport = require('passport');
+const service = require('../services/authService');
 
-const service =  new AuthService;
-
-router.post('/login',
+router.post(
+	'/login',
 	validatorHandler(login, 'body'),
 	passport.authenticate('local', { session: false }),
-	async( req, res, next)=>{
+	async (req, res, next) => {
 		try {
-			const user = req.user;
-			console.log(user);
+			const { user } = req;
 			const response = await service.generateToken(user);
 			res.status(302).json(response);
 		} catch (error) {
-			next(error)
+			next(error);
 		}
-	}
-)
+	},
+);
 
 module.exports = router;

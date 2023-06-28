@@ -11,7 +11,9 @@
     "migration-run": "sequelize-cli db:migrate",
     "migration-rollback": "sequelize-cli db:migrate:undo",
     "migration-delete": "sequelize-cli db:migrate:undo:all",
-    "migration-debug": "sequelize-cli db:migrate --debug"
+    "migration-debug": "sequelize-cli db:migrate --debug",
+    "slint": "eslint .",
+    "slint-fix": "eslint . --fix"
   },
   "keywords": [],
   "author": "",
@@ -32,9 +34,12 @@
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "sequelize": "^6.31.0",
-    "sequelize-cli": "^6.6.1"
+    "sequelize-cli": "^6.6.1",
+    "word-wrap": "^1.2.3"
   },
   "devDependencies": {
+    "eslint": "^8.43.0",
+    "eslint-config-airbnb-base": "^15.0.0",
     "nodemon": "^2.0.22"
   }
 }

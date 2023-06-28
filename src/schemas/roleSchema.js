@@ -6,20 +6,20 @@ const status = joi.boolean();
 
 const createRol = joi.object({
 	name: name.required(),
-	status
+	status,
 });
 
 const getRol = joi.object({
-	id: id.required()
+	id: id.required(),
 });
 
 const updatedRole = joi.object({
 	name,
-	status
+	status,
 });
 
 module.exports = {
 	createRol,
 	getRol,
-	updatedRole
+	updatedRole,
 };
