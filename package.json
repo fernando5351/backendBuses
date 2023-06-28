@@ -12,8 +12,8 @@
     "migration-rollback": "sequelize-cli db:migrate:undo",
     "migration-delete": "sequelize-cli db:migrate:undo:all",
     "migration-debug": "sequelize-cli db:migrate --debug",
-    "slint": "eslint .",
-    "slint-fix": "eslint . --fix"
+    "eslint": "eslint .",
+    "eslint-fix": "eslint . --fix"
   },
   "keywords": [],
   "author": "",
