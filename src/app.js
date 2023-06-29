@@ -1,4 +1,6 @@
 const express = require('express');
+// eslint-disable-next-line import/no-extraneous-dependencies
+const { engine } = require('express-handlebars');
 const cors = require('cors');
 
 const port = process.env.PORT || 3000;
@@ -16,11 +18,21 @@ const app = express();
 
 // config
 app.set('port', port);
+// template engine
+app.set('views', path.join(__dirname, '../public/html'));
+app.engine('.hbs', engine({
+	defaultLayout: 'main',
+	layoutsDir: path.join(app.get('views'), 'layouts'),
+	partialsDir: path.join(app.get('views'), 'partials'),
+	extname: '.hbs',
+}));
+app.set('view engine', '.hbs');
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: '30mb' }));
 app.use(multer({ storage }).single('file'));
 
-// middlewar
+// middleware
 const whitelist = ['https://app.swaggerhub.com/apis-docs/ISAACFERNANDO5351/BusES/1'];
 const options = {
 	origin: (origin, callback) => {
@@ -37,13 +49,13 @@ require('./utils/auth');
 // routes
 routerApi(app);
 
+// public files
+app.use(express.static(path.join(__dirname, '../public')));
+
 // middlewares
 app.use(logErrors);
 app.use(ormErrorHandler);
 app.use(boomErrorHandler);
 app.use(errorHandler);
-
-// public files
-app.use(express.static(path.join(__dirname, '../public')));
 
 module.exports = app;
