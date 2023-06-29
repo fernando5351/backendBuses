@@ -1,0 +1,53 @@
+.container {
+	width: 100%;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.formcontainer {
+	width: 25%;
+	height: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: 2px solid #000;
+	border-radius: 50px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	flex-wrap: wrap;
+
+}
+
+.passwordForm {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	flex-wrap: wrap;
+
+}
+
+.error {
+	color: red;
+	font-weight: bold;
+}
+
+.success {
+	color: green;
+}
+
+.inputsuccess {
+	border: 1px solid green;
+}
+
+.inputerror {
+	border: 1px solid red;
+}
+
+input:focus {
+	outline: none;
+}
