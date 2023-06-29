@@ -13,4 +13,19 @@ const jwtStrategy = new Strategy(options, (payload, done) => {
 	return done(null, payload);
 });
 
-module.exports = jwtStrategy;
+const recovery = {
+	secretOrKey: config.recoverySecret,
+	jwtFromRequest: ExtractJwt.fromUrlQueryParameter('token'),
+};
+
+const jwtStrategyRecov = new Strategy(recovery, (payload, done) => {
+	if (!payload) {
+		done('No token provided', false);
+	}
+	return done(null, payload);
+});
+
+module.exports = {
+	jwtStrategy,
+	jwtStrategyRecov,
+};
