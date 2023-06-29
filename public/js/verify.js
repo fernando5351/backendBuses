@@ -26,15 +26,34 @@ function send(event) {
 
 	fetch(`http://localhost:3000/api/v1/auth/recovery/password?token=${token}`, requestOptions)
 		.then((response) => {
-			// Aquí puedes manejar la respuesta de la solicitud
-			if (response) {
+			if (response.ok) {
 				console.log(response);
+				// Password recovery successful
+				Swal.fire({
+					title: 'Success',
+					text: 'Password recovery successful!',
+					icon: 'success',
+					timer: 4000,
+				});
 			} else {
-				console.error('Error en la solicitud');
+				// Password recovery error
+				Swal.fire({
+					title: 'Error',
+					text: 'An error occurred during password recovery.',
+					icon: 'error',
+					timer: 4000,
+				});
 			}
 		})
 		.catch((error) => {
-			console.error('Error en la solicitud:', error);
+			console.error('Error in request:', error);
+			// Password recovery error
+			Swal.fire({
+				title: 'Error',
+				text: 'An error occurred during password recovery.',
+				icon: 'error',
+				timer: 4000,
+			});
 		});
 }
 
@@ -63,7 +82,7 @@ confirmPasswordInput.addEventListener('input', () => {
 	passwordInput.classList.add('inputsuccess');
 
 	if (password !== confirmPassword) {
-		showError('Las contraseñas no coinciden');
+		showError('The passwords do not match');
 	} else {
 		hideError();
 	}
