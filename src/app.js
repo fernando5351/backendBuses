@@ -33,7 +33,7 @@ app.use(express.urlencoded({ extended: true, limit: '30mb' }));
 app.use(multer({ storage }).single('file'));
 
 // middleware
-const whitelist = ['https://app.swaggerhub.com/apis-docs/ISAACFERNANDO5351/BusES/1'];
+const whitelist = ['https://app.swaggerhub.com/apis-docs/ISAACFERNANDO5351/BusES/1', 'http://localhost:3000'];
 const options = {
 	origin: (origin, callback) => {
 		if (whitelist.includes(origin) || !origin) {
