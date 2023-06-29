@@ -42,7 +42,8 @@ class AuthService {
 	}
 
 	async sendMailRecovery(user, token) {
-		const url = `http://localhost:3000/api/v1/auth/recovery?token=${token}`;
+		// const url = `http://localhost:3000/api/v1/auth/recovery?token=${token}`;
+		const url = `https://buses-production.up.railway.app/api/v1/auth/recovery?token=${token}`;
 		let html = bodyHtml.replace('{{message}}', 'To recover your account click on the following link:');
 		html = html.replace('{{code}}', url);
 		html = html.replace('{{username}}', user.user.dataValues.username);
