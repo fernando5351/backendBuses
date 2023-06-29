@@ -29,8 +29,10 @@ class UserServie {
 			verificationCode: this.code(),
 		};
 		const user = await models.User.create(userData);
-		let html = bodyHtml.replace('{{code}}', user.dataValues.verificationCode);
+		let html = bodyHtml.replace('{{message}}', 'Your verification code is:');
+		html = bodyHtml.replace('{{code}}', user.dataValues.verificationCode);
 		html = html.replace('{{username}}', user.dataValues.username);
+		html = html.replace('{{info}}', 'Keep in mind that this code is for single use.');
 		await service.sendMail(user, 'verification code', html);
 		return {
 			status: 201,

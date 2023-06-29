@@ -32,9 +32,19 @@ const login = joi.object({
 	password: password.required(),
 });
 
+const recovery = joi.object({
+	email: email.required(),
+});
+
+const recoveryPassword = joi.object({
+	password: password.required(),
+});
+
 module.exports = {
 	createUser,
 	getUser,
 	updateUser,
 	login,
+	recovery,
+	recoveryPassword,
 };
