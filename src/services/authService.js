@@ -51,7 +51,8 @@ class AuthService {
 		await service.sendMail(user.user.dataValues, 'verification code', html);
 		return {
 			status: 200,
-			message: 'success',
+			description: 'success',
+			message: 'An email with a link has been sent to your email',
 		};
 	}
 
