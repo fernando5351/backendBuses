@@ -12,13 +12,7 @@ const config = {
 	jwtSecret: process.env.JWT_SECRET,
 	gmailPassword: process.env.GMAIL_PASSWORD,
 	gmailUser: process.env.GMAIL_USERNAME,
+	recoverySecret: process.env.SECRET_RECOVERY,
 };
-
-// console.log(config.PORT + ' => port');
-// console.log(config.dbUser + ' => dbUser');
-// console.log(config.dbPassword + ' => dbPassword');
-// console.log(config.dbName + ' => dbName');
-// console.log(config.dbHost + ' => dbHost');
-// console.log(config.dbPort + ' => dbPort');
 
 module.exports = { config };
