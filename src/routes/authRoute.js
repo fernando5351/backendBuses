@@ -57,11 +57,8 @@ router.post(
 
 router.get(
 	'/recovery',
-	passport.authenticate('jwt', { session: false }),
+	// passport.authenticate('jwt', { session: false }),
 	async (req, res) => {
-		const { token } = req.query;
-		// eslint-disable-next-line no-console
-		console.log(token);
 		res.render('index');
 	},
 );
