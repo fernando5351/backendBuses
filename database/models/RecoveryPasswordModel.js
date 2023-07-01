@@ -21,6 +21,10 @@ const RecoveryPasswordsModel = {
 		onDelete: 'NO ACTION',
 		onUpdate: 'CASCADE',
 	},
+	oldPassword: {
+		allowNull: false,
+		type: DataTypes.STRING,
+	},
 	createAt: {
 		allowNull: false,
 		type: DataTypes.DATE,
@@ -36,6 +40,12 @@ const RecoveryPasswordsModel = {
 };
 
 class Recovery extends Model {
+	static associate(models) {
+		this.belongsTo(models.User, {
+			as: 'User',
+		});
+	}
+
 	static config(sequelize) {
 		return {
 			sequelize,
