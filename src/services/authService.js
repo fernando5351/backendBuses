@@ -48,7 +48,7 @@ class AuthService {
 		html = html.replace('{{code}}', url);
 		html = html.replace('{{username}}', user.user.dataValues.username);
 		html = html.replace('{{info}}', 'Please note that this verification code is only valid if you have already logged in to our website. If you have not requested this, click on the following link:');
-		await service.sendMail(user.user.dataValues, 'verification code', html);
+		await service.sendMail(user.user.dataValues, 'recovery password', html);
 		return {
 			status: 200,
 			description: 'success',
