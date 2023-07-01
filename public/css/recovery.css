@@ -84,9 +84,14 @@
 	background:linear-gradient(30deg, crimson,sienna, royalblue, indianred, purple);
 }
 
+.info {
+	color: coral;
+	text-align: center;
+}
 .error {
 	color: red;
 	font-weight: bold;
+	margin: 10px;
 }
 
 .success {
@@ -94,11 +99,11 @@
 }
 
 .inputsuccess {
-	border: 1px solid green;
+	border: 3px solid green !important;
 }
 
 .inputerror {
-	border: 1px solid red;
+	border: 3px solid red !important;
 }
 
 input:focus {

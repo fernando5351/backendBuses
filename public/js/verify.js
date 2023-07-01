@@ -26,15 +26,17 @@ toggleIconConfirm.addEventListener('click', () => {
 	}
 });
 
+const urlParams = new URLSearchParams(window.location.search);
+const token = urlParams.get('token');
+console.log(token);
+
 function send(event) {
 	event.preventDefault();
 	const form = event.target;
 	const password = form.password.value;
-	console.log(password);
-	const confirmPassword = form.confirmPassword.value;
-	console.log(confirmPassword);
-	const urlParams = new URLSearchParams(window.location.search);
-	const token = urlParams.get('token');
+	console.log(`${password} => password`);
+	const confirmPassword = form.passwordConfirm.value;
+	console.log(`${confirmPassword} => confirm`);
 	console.log(token);
 
 	const requestOptions = {
@@ -103,9 +105,11 @@ confirmPasswordInput.addEventListener('input', () => {
 	const confirmPassword = confirmPasswordInput.value;
 	passwordInput.classList.add('inputsuccess');
 
-	if (password !== confirmPassword) {
-		showError('The passwords do not match');
-	} else {
-		hideError();
+	if (confirmPassword.length >= password.length) {
+		if (password !== confirmPassword) {
+			showError('The passwords do not match');
+		} else {
+			hideError();
+		}
 	}
 });
