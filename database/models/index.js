@@ -9,7 +9,7 @@ function setupModels(sequelize) {
 	// relations
 	Role.associate(sequelize.models);
 	User.associate(sequelize.models);
-	Stop.associate(sequelize.models);
+	// Stop.associate(sequelize.models);
 }
 
 module.exports = setupModels;
