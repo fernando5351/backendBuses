@@ -1,17 +1,42 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-console */
-const confirmPasswordInput = document.getElementById('confirmPassword');
+const confirmPasswordInput = document.getElementById('passwordConfirm');
+
+const toggleIcon = document.querySelector('.toggle-icon');
+const toggleIconConfirm = document.querySelector('.toggle-icon-confirm');
+const passwordInput = document.getElementById('password');
+
+toggleIcon.addEventListener('click', () => {
+	if (passwordInput.type === 'password') {
+		passwordInput.type = 'text';
+		toggleIcon.innerHTML = '<i class="fas fa-eye"></i>';
+	} else {
+		passwordInput.type = 'password';
+		toggleIcon.innerHTML = '<i class="fas fa-eye-slash"></i>';
+	}
+});
+
+toggleIconConfirm.addEventListener('click', () => {
+	if (confirmPasswordInput.type === 'password') {
+		confirmPasswordInput.type = 'text';
+		toggleIconConfirm.innerHTML = '<i class="fas fa-eye"></i>';
+	} else {
+		confirmPasswordInput.type = 'password';
+		toggleIconConfirm.innerHTML = '<i class="fas fa-eye-slash"></i>';
+	}
+});
+
+const urlParams = new URLSearchParams(window.location.search);
+const token = urlParams.get('token');
+console.log(token);
 
 function send(event) {
 	event.preventDefault();
-
 	const form = event.target;
 	const password = form.password.value;
-	console.log(password);
-	const confirmPassword = form.confirmPassword.value;
-	console.log(confirmPassword);
-	const urlParams = new URLSearchParams(window.location.search);
-	const token = urlParams.get('token');
+	console.log(`${password} => password`);
+	const confirmPassword = form.passwordConfirm.value;
+	console.log(`${confirmPassword} => confirm`);
 	console.log(token);
 
 	const requestOptions = {
@@ -31,7 +56,6 @@ function send(event) {
 		.then((response) => {
 			if (response.ok) {
 				console.log(response);
-				// Password recovery successful
 				Swal.fire({
 					title: 'Success',
 					text: 'Password recovery successful!',
@@ -39,7 +63,6 @@ function send(event) {
 					timer: 4000,
 				});
 			} else {
-				// Password recovery error
 				Swal.fire({
 					title: 'Error',
 					text: 'An error occurred during password recovery.',
@@ -50,7 +73,6 @@ function send(event) {
 		})
 		.catch((error) => {
 			console.error('Error in request:', error);
-			// Password recovery error
 			Swal.fire({
 				title: 'Error',
 				text: 'An error occurred during password recovery.',
@@ -62,7 +84,6 @@ function send(event) {
 
 document.querySelector('.passwordForm').addEventListener('submit', send);
 
-const passwordInput = document.getElementById('password');
 const passwordError = document.getElementById('passwordError');
 
 function showError(message) {
@@ -84,9 +105,11 @@ confirmPasswordInput.addEventListener('input', () => {
 	const confirmPassword = confirmPasswordInput.value;
 	passwordInput.classList.add('inputsuccess');
 
-	if (password !== confirmPassword) {
-		showError('The passwords do not match');
-	} else {
-		hideError();
+	if (confirmPassword.length >= password.length) {
+		if (password !== confirmPassword) {
+			showError('The passwords do not match');
+		} else {
+			hideError();
+		}
 	}
 });

@@ -55,14 +55,24 @@ router.post(
 	},
 );
 
-router.get(
-	'/recovery',
-	passport.authenticate('jwt', { session: false }),
-	async (req, res) => {
-		const { token } = req.query;
-		// eslint-disable-next-line no-console
-		console.log(token);
+router.get('/recovery', (req, res, next) => {
+	passport.authenticate('jwt', { session: false }, (err, user) => {
+		if (err) {
+			next(err);
+		}
+
+		if (!user) {
+			res.render('unauthorized');
+		}
+
 		res.render('index');
+	})(req, res, next);
+});
+
+router.get(
+	'/unauthorized',
+	async (req, res) => {
+		res.render('unauthorized');
 	},
 );
 
