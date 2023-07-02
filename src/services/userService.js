@@ -89,7 +89,16 @@ class UserServie {
 
 	async update(id, data, payload) {
 		const { user } = await this.getByPk(id, payload);
-		const res = await user.update(data);
+		let dto;
+		if (data.password) {
+			dto = {
+				...data,
+				password: await bcrypt.hash(data.password, 10),
+			};
+		} else {
+			dto = data;
+		}
+		const res = await user.update(dto);
 		return Promise.resolve({
 			status: 202,
 			message: `User with id:${res[0]} updated successfully!`,
