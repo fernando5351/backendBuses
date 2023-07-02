@@ -19,10 +19,11 @@ const StopSchema = {
 		unique: true,
 		type: DataTypes.DECIMAL(9, 6),
 	},
-	stop_name: {
-		allowNull: true,
+	stopName: {
+		allowNull: false,
 		unique: true,
 		type: DataTypes.STRING,
+		field: 'stop_name',
 	},
 };
 
