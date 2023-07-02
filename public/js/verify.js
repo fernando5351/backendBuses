@@ -49,8 +49,8 @@ function send(event) {
 		}),
 	};
 
-	const url = `https://buses-production.up.railway.app/api/v1/auth/recovery/password?token=${token}`;
-	// const url = `http://localhost:3000/api/v1/auth/recovery/password?token=${token}`;
+	// const url = `https://buses-production.up.railway.app/api/v1/auth/recovery/password?token=${token}`;
+	const url = `http://localhost:3000/api/v1/auth/recovery/password?token=${token}`;
 
 	fetch(url, requestOptions)
 		.then((response) => {
