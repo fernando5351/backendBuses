@@ -25,6 +25,10 @@ const RecoveryPasswordsModel = {
 		allowNull: false,
 		type: DataTypes.STRING,
 	},
+	token: {
+		allowNull: false,
+		type: DataTypes.STRING,
+	},
 	createAt: {
 		allowNull: false,
 		type: DataTypes.DATE,
@@ -34,7 +38,7 @@ const RecoveryPasswordsModel = {
 	status: {
 		allowNull: false,
 		type: DataTypes.BOOLEAN,
-		defaultValue: true,
+		defaultValue: false,
 		field: 'status',
 	},
 };

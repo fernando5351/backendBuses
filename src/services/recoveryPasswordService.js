@@ -3,7 +3,12 @@ const { models } = require('../../libs/sequelize');
 
 class RecoveryService {
 	async createRecovery(data) {
-		const recovery = await models.Recovery.create(data);
+		const dta = {
+			userId: data.id,
+			oldPassword: data.password,
+			token: data.token,
+		};
+		const recovery = await models.Recovery.create(dta);
 		return Promise.resolve({
 			status: 201,
 			message: 'Recovery created successfully',
@@ -12,7 +17,7 @@ class RecoveryService {
 	}
 
 	async getByPk(userId) {
-		const recovery = await models.Recovery.findOne({ where: { userId } });
+		const recovery = await models.Recovery.findOne({ where: { userId, status: false } });
 		if (!recovery) {
 			throw boom.notFound('Record not Found');
 		}
@@ -23,9 +28,9 @@ class RecoveryService {
 		});
 	}
 
-	async update(id, data) {
+	async update(id) {
 		const { recovery } = await this.getByPk(id);
-		const recoveryUpdated = await recovery.update(data);
+		const recoveryUpdated = await recovery.update({ status: true });
 		return Promise.resolve({
 			status: 202,
 			message: 'Updated!',

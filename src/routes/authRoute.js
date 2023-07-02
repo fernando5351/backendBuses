@@ -5,9 +5,11 @@ const { login, recovery, recoveryPassword } = require('../schemas/userSchema');
 const validatorHandler = require('../../middlewares/validatorHandler');
 const AuthService = require('../services/authService');
 const UserService = require('../services/userService');
+const RecoveryService = require('../services/recoveryPasswordService');
 
 const authService = new AuthService();
 const userService = new UserService();
+const recoveryService = new RecoveryService();
 
 router.post(
 	'/login',
@@ -32,6 +34,10 @@ router.post(
 			const { email } = req.body;
 			const user = await userService.getByEmail(email);
 			const token = await authService.recoveryAuth(user);
+			await recoveryService.createRecovery({
+				...user.user.dataValues,
+				token,
+			});
 			const message = await authService.sendMailRecovery(user, token);
 			res.status(200).json(message);
 		} catch (error) {
@@ -46,9 +52,18 @@ router.post(
 	passport.authenticate('jwt', { session: false }),
 	async (req, res, next) => {
 		try {
-			const token = req.user;
-			const data = await authService.changePassword(token, req.body);
-			res.json(data);
+			const payload = req.user;
+			const token = req.query;
+			console.log(token);
+			const user = await recoveryService.getByPk(payload.sub);
+			console.log(user.recovery);
+			if (user.recovery.status === false && user.recovery.token === token) {
+				await recoveryService.update(payload.sub);
+				const data = await authService.changePassword(payload, req.body);
+				res.json(data);
+			} else {
+				res.render('unauthorized');
+			}
 		} catch (error) {
 			next(error);
 		}
