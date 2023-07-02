@@ -8,7 +8,7 @@ const long = joi.number().precision(6);
 const createStop = joi.object({
 	lat: lat.required(),
 	long: long.required(),
-	stopName: long.required(),
+	stopName: stopName.required(),
 });
 
 const getStop = joi.object({
