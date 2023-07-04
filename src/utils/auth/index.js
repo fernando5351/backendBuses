@@ -4,4 +4,4 @@ const { jwtStrategy, jwtStrategyRecov } = require('./strategies/passportJWT');
 
 passport.use(localStrategy);
 passport.use(jwtStrategy);
-passport.use(jwtStrategyRecov);
+passport.use('jwtRecovery', jwtStrategyRecov);

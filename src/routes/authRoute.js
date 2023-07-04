@@ -43,7 +43,7 @@ router.post(
 router.post(
 	'/recovery/password',
 	validatorHandler(recoveryPassword, 'body'),
-	passport.authenticate('jwt', { session: false }),
+	passport.authenticate('jwtRecovery', { session: false }),
 	async (req, res, next) => {
 		try {
 			const token = req.user;
@@ -56,7 +56,7 @@ router.post(
 );
 
 router.get('/recovery', (req, res, next) => {
-	passport.authenticate('jwt', { session: false }, (err, user) => {
+	passport.authenticate('jwtRecovery', { session: false }, (err, user) => {
 		if (err) {
 			next(err);
 		}
