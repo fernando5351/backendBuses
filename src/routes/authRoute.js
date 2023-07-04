@@ -71,16 +71,14 @@ router.post(
 );
 
 router.get('/recovery', (req, res, next) => {
-	passport.authenticate('jwt', { session: false }, (err, user) => {
-		if (err) {
-			next(err);
-		}
+	passport.authenticate('jwtRecovery', { session: false }, (err, user) => {
+		console.log(user);
 
 		if (!user) {
 			res.render('unauthorized');
+		} else {
+			res.render('index');
 		}
-
-		res.render('index');
 	})(req, res, next);
 });
 
