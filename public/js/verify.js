@@ -49,26 +49,38 @@ function send(event) {
 		}),
 	};
 
-	// const url = `https://buses-production.up.railway.app/api/v1/auth/recovery/password?token=${token}`;
-	const url = `http://localhost:3000/api/v1/auth/recovery/password?token=${token}`;
+	// const uri = 'https://buses-production.up.railway.app/api/v1';
+	// const url = `${uri}/auth/recovery/password?token=${token}`;
+	const uri = 'http://localhost:3000/api/v1';
+	const url = `${uri}/auth/recovery/password?token=${token}`;
 
 	fetch(url, requestOptions)
 		.then((response) => {
-			if (response.ok) {
-				console.log(response);
+			console.log(response);
+			if (response.status === 404) {
+				console.log('soy status 404');
+				Swal.fire({
+					title: 'Error',
+					text: 'el token es invalido.',
+					icon: 'error',
+					timer: 4000,
+				});
+			} if (response.redirected === true) {
+				console.log('soy redirected');
+				// setTimeout(() => {
+				// 	window.location.href = `${uri}/auth/unauthorized`;
+				// }, 100);
+			} if (response.status === 200) {
+				console.log('soy status 200');
 				Swal.fire({
 					title: 'Success',
 					text: 'Password recovery successful!',
 					icon: 'success',
-					timer: 4000,
+					timer: 2000,
 				});
-			} else {
-				Swal.fire({
-					title: 'Error',
-					text: 'An error occurred during password recovery.',
-					icon: 'error',
-					timer: 4000,
-				});
+				// setTimeout(() => {
+				// 	window.location.href = `${uri}/auth/changed`;
+				// }, 2002);
 			}
 		})
 		.catch((error) => {
