@@ -1,4 +1,3 @@
-const boom = require('@hapi/boom');
 const { models } = require('../../libs/sequelize');
 
 class RecoveryService {
@@ -16,21 +15,24 @@ class RecoveryService {
 		});
 	}
 
-	async getByPk(userId) {
-		const recovery = await models.Recovery.findOne({ where: { userId, status: false } });
-		if (!recovery) {
-			throw boom.notFound('Record not Found');
-		}
-		return Promise.resolve({
-			status: 200,
-			message: 'Role Fetched',
+	async getByPk(userId, token) {
+		const conditions = {
+			...token,
+			userId,
+			status: false,
+		};
+		const recovery = await models.Recovery.findOne({ where: conditions });
+		return Promise.resolve(
 			recovery,
-		});
+		);
 	}
 
-	async update(id) {
-		const { recovery } = await this.getByPk(id);
-		const recoveryUpdated = await recovery.update({ status: true });
+	async update(id, token) {
+		const recovery = await this.getByPk(id, token);
+		const changes = {
+			status: true,
+		};
+		const recoveryUpdated = await recovery.update(changes);
 		return Promise.resolve({
 			status: 202,
 			message: 'Updated!',

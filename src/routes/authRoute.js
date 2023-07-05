@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const passport = require('passport');
 
-const { login, recovery, recoveryPassword } = require('../schemas/userSchema');
+const { login, recovery } = require('../schemas/userSchema');
 const validatorHandler = require('../../middlewares/validatorHandler');
 const AuthService = require('../services/authService');
 const UserService = require('../services/userService');
@@ -46,38 +46,40 @@ router.post(
 	},
 );
 
-router.post(
-	'/recovery/password',
-	validatorHandler(recoveryPassword, 'body'),
-	passport.authenticate('jwtRecovery', { session: false }),
-	async (req, res, next) => {
+router.post('/recovery/password', async (req, res, next) => {
+	passport.authenticate('jwtRecovery', { session: false }, async (err, user) => {
 		try {
-			const payload = req.user;
-			const token = req.query;
-			console.log(token);
-			const user = await recoveryService.getByPk(payload.sub);
-			console.log(user.recovery);
-			if (user.recovery.status === false && user.recovery.token === token) {
-				await recoveryService.update(payload.sub);
-				const data = await authService.changePassword(payload, req.body);
-				res.json(data);
+			if (!user) {
+				res.redirect('unauthorized');
 			} else {
-				res.render('unauthorized');
+				const token = req.query;
+				const userRecov = await recoveryService.getByPk(user.sub, token);
+				if (!userRecov) {
+					res.redirect('unauthorized');
+				} else {
+					await recoveryService.update(user.sub, token);
+					const data = await authService.changePassword(user, req.body);
+					res.json(data);
+				}
 			}
 		} catch (error) {
 			next(error);
 		}
-	},
-);
+	})(req, res, next);
+});
 
 router.get('/recovery', (req, res, next) => {
-	passport.authenticate('jwtRecovery', { session: false }, (err, user) => {
-		console.log(user);
-
+	passport.authenticate('jwtRecovery', { session: false }, async (err, user) => {
+		const token = req.query;
 		if (!user) {
 			res.render('unauthorized');
 		} else {
-			res.render('index');
+			const userRecov = await recoveryService.getByPk(user.sub, token);
+			if (!userRecov) {
+				res.render('tokenUsed');
+			} else {
+				res.render('index');
+			}
 		}
 	})(req, res, next);
 });
@@ -86,6 +88,13 @@ router.get(
 	'/unauthorized',
 	async (req, res) => {
 		res.render('unauthorized');
+	},
+);
+
+router.get(
+	'/changed',
+	async (req, res) => {
+		res.render('changed');
 	},
 );
 
