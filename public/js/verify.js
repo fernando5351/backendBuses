@@ -49,10 +49,10 @@ function send(event) {
 		}),
 	};
 
-	// const uri = 'https://buses-production.up.railway.app/api/v1';
-	// const url = `${uri}/auth/recovery/password?token=${token}`;
-	const uri = 'http://localhost:3000/api/v1';
+	const uri = 'https://buses-production.up.railway.app/api/v1';
 	const url = `${uri}/auth/recovery/password?token=${token}`;
+	// const uri = 'http://localhost:3000/api/v1';
+	// const url = `${uri}/auth/recovery/password?token=${token}`;
 
 	fetch(url, requestOptions)
 		.then((response) => {
@@ -67,9 +67,9 @@ function send(event) {
 				});
 			} if (response.redirected === true) {
 				console.log('soy redirected');
-				// setTimeout(() => {
-				// 	window.location.href = `${uri}/auth/unauthorized`;
-				// }, 100);
+				setTimeout(() => {
+					window.location.href = `${uri}/auth/unauthorized`;
+				}, 100);
 			} if (response.status === 200) {
 				console.log('soy status 200');
 				Swal.fire({
@@ -78,9 +78,9 @@ function send(event) {
 					icon: 'success',
 					timer: 2000,
 				});
-				// setTimeout(() => {
-				// 	window.location.href = `${uri}/auth/changed`;
-				// }, 2002);
+				setTimeout(() => {
+					window.location.href = `${uri}/auth/changed`;
+				}, 2002);
 			}
 		})
 		.catch((error) => {
