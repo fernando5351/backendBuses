@@ -11,15 +11,14 @@ const createStop = joi.object({
 	stopName: stopName.required(),
 });
 
-const getStop = joi.object({
-	id: id.required(),
-});
-
 const updateStop = joi.object({
-	id: id.required(),
 	lat,
 	long,
 	stopName,
+});
+
+const getStop = joi.object({
+	id: id.required(),
 });
 
 module.exports = {
